@@ -13,7 +13,7 @@ type Variable struct {
 	UserViewable bool   `json:"user_viewable"`
 	UserEditable bool   `json:"user_editable"`
 	Rules        string `json:"rules"`
-	FieldType    string `json:"field_type"`
+	Value        string `json:"-"`
 }
 
 type Config struct {
@@ -29,9 +29,19 @@ type Script struct {
 	Entrypoint string `json:"entrypoint"`
 }
 
+type Scripts struct {
+	Installation Script `json:"installation"`
+}
+
 type Meta struct {
 	Version   string `json:"version"`
 	UpdateUrl string `json:"update_url"`
+}
+
+type CrackProps struct {
+	InstallDirPath    string            `json:"-"`
+	InstallScriptPath string            `json:"-"`
+	EnvVariables      map[string]string `json:"-"`
 }
 
 type Egg struct {
@@ -46,8 +56,9 @@ type Egg struct {
 	FileDenyList []string          `json:"file_denylist"`
 	Startup      string            `json:"startup"`
 	Config       Config            `json:"config"`
-	Scripts      map[string]Script `json:"scripts"`
+	Scripts      Scripts           `json:"scripts"`
 	Variables    []Variable        `json:"variables"`
+	CrackProps   CrackProps        `json:"-"`
 }
 
 func (e *Egg) UnmarshalJSON(data []byte) error {
